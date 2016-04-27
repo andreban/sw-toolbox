@@ -42,7 +42,6 @@ describe('Test toolbox.networkOnly', function() {
       return cache.match('/test/data/files/text.txt');
     })
     .then(response => {
-      console.log(response);
       (typeof response).should.equal('undefined');
     });
   });
