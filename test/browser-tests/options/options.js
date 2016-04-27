@@ -18,51 +18,12 @@
 
 'use strict';
 
-describe('Test precache method', () => {
-  const swUtils = window.goog.WindowUtils;
-  const serviceWorkersFolder = '/test/browser-tests/precache/serviceworkers';
+describe('Test Option Changing', () => {
+  // const swUtils = window.goog.WindowUtils;
 
-  describe('Test precache(<Array>)', function() {
-    it('should precache all desired assets from an array of strings', () => {
-      let assetList = [
-        '/test/data/files/text.txt',
-        '/test/data/files/text-1.txt'
-      ];
-      return swUtils.activateSW(serviceWorkersFolder + '/array-strings.js')
-        .then(() => {
-          return swUtils.getAllCachedAssets('precache-valid');
-        })
-        .then(cachedAssets => {
-          return compareCachedAssets(assetList, cachedAssets);
-        });
-    });
+  // const serviceWorkersFolder = '/test/browser-tests/options/serviceworkers';
 
-    it('should precache all desired assets from an array of requests', () => {
-      let assetList = [
-        '/test/data/files/text.txt',
-        '/test/data/files/text-1.txt'
-      ];
-      return swUtils.activateSW(serviceWorkersFolder + '/array-requests.js')
-        .then(() => {
-          return swUtils.getAllCachedAssets('precache-valid');
-        })
-        .then(cachedAssets => {
-          return compareCachedAssets(assetList, cachedAssets);
-        });
-    });
-
-    it('should precache all desired assets from an array of strings and requests', () => {
-      let assetList = [
-        '/test/data/files/text.txt',
-        '/test/data/files/text-1.txt'
-      ];
-      return swUtils.activateSW(serviceWorkersFolder + '/array-mix.js')
-        .then(() => {
-          return swUtils.getAllCachedAssets('precache-valid');
-        })
-        .then(cachedAssets => {
-          return compareCachedAssets(assetList, cachedAssets);
-        });
-    });
+  it('should pass all tests in options.js service worker', () => {
+    // TODO: Start mocha tests in serviceWorkersFolder + '/options.js'
   });
 });

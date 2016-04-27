@@ -20,7 +20,11 @@ var browserify = require('browserify');
 var eslint = require('gulp-eslint');
 var ghPages = require('gulp-gh-pages');
 var gulp = require('gulp');
+const buffer = require('vinyl-buffer');
 var source = require('vinyl-source-stream');
+const uglify = require('gulp-uglify');
+const sourcemaps = require('gulp-sourcemaps');
+const gulpUtil = require('gulp-util');
 var temp = require('temp').track();
 var mocha = require('gulp-mocha');
 var testServer = require('./test/server/index.js');
@@ -53,16 +57,14 @@ gulp.task('build', function() {
     debug: true
   });
 
-  bundler.plugin('browserify-header');
-  bundler.plugin('minifyify', {
-    map: 'sw-toolbox.map.json',
-    output: 'sw-toolbox.map.json'
-  });
-
-  return bundler
-    .bundle()
-    .pipe(source('sw-toolbox.js'))
-    .pipe(gulp.dest('./'));
+  return bundler.bundle()
+  .pipe(source('sw-toolbox.js'))
+  .pipe(buffer())
+  .pipe(sourcemaps.init())
+  // Uglify can't handle ES2015 - Yay.
+  // .pipe(uglify().on('error', gulpUtil.log))
+  .pipe(sourcemaps.write('.'))
+  .pipe(gulp.dest('./'));
 });
 
 gulp.task('lint', function() {

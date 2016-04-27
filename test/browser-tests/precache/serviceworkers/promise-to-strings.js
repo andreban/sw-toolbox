@@ -20,6 +20,7 @@
 
 importScripts('/sw-toolbox.js');
 
+self.toolbox.options.debug = true;
 self.toolbox.options.cache = {
   name: 'precache-valid'
 };

@@ -260,20 +260,14 @@ describe('Test precache method', () => {
       .should.be.rejected;
     });
 
-    // This behaviour is undefined - discussed here:
-    // https://github.com/GoogleChrome/sw-toolbox/issues/75
-    it.skip('should not precache paths that do no exist', () => {
-      let testId = 'precache-non-existant-files';
-      let validAssetsList = [
-        '/test/data/files/text.txt',
-        '/test/data/files/text-1.txt'
-      ];
+    it('should not precache paths that do no exist', done => {
       return swUtils.activateSW(serviceWorkersFolder + '/error-non-existant-files.js')
         .then(() => {
-          return swUtils.getAllCachedAssets(testId);
+          done(new Error('This should have rejected'));
         })
-        .then(cachedAssets => {
-          return compareCachedAssets(validAssetsList, cachedAssets);
+        .catch(err => {
+          err.message.should.contain('Installing servier worker became redundant');
+          done();
         });
     });
   });
