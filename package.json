@@ -6,7 +6,7 @@
     "publish-release": "./node_modules/sw-testing-helpers/project/publish-release.sh",
     "build": "gulp default",
     "build-docs": "jsdoc -c jsdoc.json && cp ./build/sw-toolbox.js ./docs/",
-    "test": "gulp lint && gulp test:automated",
+    "test": "gulp lint default && mocha",
     "bundle": "./project/create-release-bundle.sh"
   },
   "main": "lib/sw-toolbox.js",
@@ -27,7 +27,6 @@
     "gulp": "^3.9.0",
     "gulp-eslint": "^1.1.1",
     "gulp-gh-pages": "^0.5.4",
-    "gulp-mocha": "^2.2.0",
     "jsdoc": "^3.4.0",
     "jshint-stylish": "^2.1.0",
     "minifyify": "^7.1.0",

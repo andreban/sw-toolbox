@@ -22,7 +22,6 @@ var ghPages = require('gulp-gh-pages');
 var gulp = require('gulp');
 var source = require('vinyl-source-stream');
 var temp = require('temp').track();
-var mocha = require('gulp-mocha');
 var testServer = require('./test/server/index.js');
 
 var buildSources = ['lib/**/*.js'];
@@ -38,14 +37,6 @@ gulp.task('test:manual', function() {
   });
 });
 
-gulp.task('test:automated', ['default'], function() {
-  // This task requires you to have chrome driver in your path
-  // You can do this with:
-  // npm install -g chromedriver
-  return gulp.src('test/automated-suite.js', {read: false})
-    .pipe(mocha());
-});
-
 gulp.task('build', function() {
   var bundler = browserify({
     entries: ['./lib/sw-toolbox.js'],
@@ -56,7 +47,7 @@ gulp.task('build', function() {
   bundler.plugin('browserify-header');
   bundler.plugin('minifyify', {
     map: 'sw-toolbox.map.json',
-    output: 'sw-toolbox.map.json'
+    output: './build/sw-toolbox.map.json'
   });
 
   return bundler
