@@ -19,11 +19,48 @@
 'use strict';
 
 describe('Test Option Changing', () => {
-  // const swUtils = window.goog.WindowUtils;
+  const swUtils = window.goog.WindowUtils;
 
-  // const serviceWorkersFolder = '/test/browser-tests/options/serviceworkers';
+  const serviceWorkersFolder = '/test/browser-tests/options/serviceworkers';
 
-  it('should pass all tests in options.js service worker', () => {
-    // TODO: Start mocha tests in serviceWorkersFolder + '/options.js'
+  let compareCachedAssets = (assetList, cachedAssets) => {
+    // We make a set to ensure duplicates are removed from the asset list
+    let assetSet = new Set(assetList);
+
+    return new Promise((resolve, reject) => {
+      let cachedAssetsKeys = Object.keys(cachedAssets);
+      cachedAssetsKeys.should.have.length(assetSet.size);
+
+      for (let assetPath of assetSet) {
+        let key = location.origin + assetPath;
+        if (typeof cachedAssets[key] === 'undefined') {
+          reject(new Error('Cache doesn\'t have a cache item for: ' + key));
+        }
+
+        cachedAssets[key].status.should.equal(200);
+      }
+
+      resolve();
+    });
+  };
+
+  it('should follow maxEntries limit', () => {
+    let expectedAssetList = [
+      '/test/data/files/text-2.txt',
+      '/test/data/files/text-3.txt'
+    ];
+    return swUtils.activateSW(serviceWorkersFolder + '/max-entries.js')
+      .then(() => {
+        return swUtils.getAllCachedAssets('precache-valid');
+      })
+      .then(cachedAssets => {
+        console.log(cachedAssets);
+        Object.keys(cachedAssets).length.should.equal(2);
+        return compareCachedAssets(expectedAssetList, cachedAssets);
+      });
   });
+
+  // it('should pass all tests in options.js service worker', () => {
+    // TODO: Start mocha tests in serviceWorkersFolder + '/options.js'
+  // });
 });

@@ -43,7 +43,7 @@ toolbox.router.get('', rewrite(/\/$/, '/index.html'));
 toolbox.router.get('index.html', toolbox.fastest);
 toolbox.router.get('tests.js', toolbox.networkFirst);
 toolbox.router.get('/(.*)/qunit/(.*)', toolbox.fastest);
-toolbox.precache(['index.html', 'test.js', '../node_modules/qunitjs/qunit/qunit.css', '../node_modules/qunitjs/qunit/qunit.js']);
+toolbox.precache(['index.html', 'tests.js', '../node_modules/qunitjs/qunit/qunit.css', '../node_modules/qunitjs/qunit/qunit.js']);
 
 /* Routes needed for tests */
 toolbox.router.default = respondString('Default');
@@ -103,12 +103,12 @@ toolbox.router.get('fixtures/max-cache-age-entries/:foo', toolbox.networkFirst, 
 
 toolbox.router.get('fixtures/:foo', toolbox.cacheOnly);
 // Single item
-toolbox.precache('fixtures/a');
+toolbox.precache(['fixtures/a']);
 // Array of items
 toolbox.precache(['fixtures/b', 'fixtures/c']);
 // Array of Promises
-toolbox.precache([Promise.resolve('fixtures/d'), Promise.resolve('fixtures/e')]);
+toolbox.precache(Promise.resolve(['fixtures/d', 'fixtures/e']));
 // Array of Arrays
-toolbox.precache(['fixtures/f', ['fixtures/g', 'fixtures/h'], ['fixtures/i', 'fixtures/j']]);
+toolbox.precache(['fixtures/f', 'fixtures/g', 'fixtures/h', 'fixtures/i', 'fixtures/j']);
 // Array of Promises for Arrays
-toolbox.precache([Promise.resolve(['fixtures/k', 'fixtures/l']), Promise.resolve(['fixtures/m', 'fixtures/n'])]);
+toolbox.precache(Promise.resolve(['fixtures/k', 'fixtures/l', 'fixtures/m', 'fixtures/n']));
