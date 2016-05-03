@@ -227,6 +227,23 @@ describe('Test precache method', () => {
           return compareCachedAssets(additionalInstallAssets, cachedAssets);
         });
     });
+
+    it('should precache cors requests', () => {
+      let testId = 'precache-cors';
+      return swUtils.activateSW(serviceWorkersFolder + '/cors.js')
+        .then(() => {
+          return swUtils.getAllCachedAssets(testId);
+        })
+        .then(cachedAssets => {
+          const fontRequest = cachedAssets['https://fonts.googleapis.com/css?family=Roboto:100,400,700'];
+          if (!fontRequest) {
+            throw new Error('CORs request failed');
+          }
+
+          fontRequest.status.should.equal(200);
+          fontRequest.ok.should.equal(true);
+        });
+    });
   });
 
   describe('Test precaching Error Cases', function() {

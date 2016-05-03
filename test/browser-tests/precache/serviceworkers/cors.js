@@ -19,11 +19,11 @@
 /* eslint-env worker, serviceworker */
 
 importScripts('/build/sw-toolbox.js');
-importScripts('/test/data/skip-and-claim.js');
 
-self.toolbox.router.get('/test/data/files/:foo', self.toolbox.networkFirst, {
-  cache: {
-    name: 'options-test',
-    maxAgeSeconds: 1
-  }
-});
+self.toolbox.options.cache = {
+  name: 'precache-cors'
+};
+
+self.toolbox.precache([
+  'https://fonts.googleapis.com/css?family=Roboto:100,400,700'
+]);

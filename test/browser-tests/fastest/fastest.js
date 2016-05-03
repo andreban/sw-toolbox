@@ -97,4 +97,31 @@ describe('Test toolbox.fastest', function() {
       responseText.trim().should.equal('Hello, World!');
     });
   });
+
+  it('should cache a cors request', function() {
+    const fontRequest = 'https://fonts.googleapis.com/css?family=Roboto:100,400,700';
+    return swUtils.activateSW(serviceWorkersFolder + '/cors.js')
+    .then(iframe => {
+      return iframe.contentWindow.fetch(fontRequest);
+    })
+    .then(response => {
+      response.status.should.equal(200);
+    })
+    .then(() => {
+      return new Promise(resolve => {
+        setTimeout(resolve, 500);
+      });
+    })
+    .then(() => {
+      return window.caches.open('test-cache-name');
+    })
+    .then(cache => {
+      return cache.match(fontRequest);
+    })
+    .then(response => {
+      if (!response) {
+        throw new Error('Expected the font request to be cached.');
+      }
+    });
+  });
 });

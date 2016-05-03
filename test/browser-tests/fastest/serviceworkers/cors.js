@@ -16,14 +16,14 @@
 
 'use strict';
 
-/* eslint-env worker, serviceworker */
+/* eslint-env browser */
+
+// This test looks at what would happen with multiple install events.
+// This should cache all assets in both the install and precache steps
 
 importScripts('/build/sw-toolbox.js');
 importScripts('/test/data/skip-and-claim.js');
 
-self.toolbox.router.get('/test/data/files/:foo', self.toolbox.networkFirst, {
-  cache: {
-    name: 'options-test',
-    maxAgeSeconds: 1
-  }
-});
+self.toolbox.options.cache.name = 'test-cache-name';
+
+self.toolbox.router.get(/https:\/\/fonts\.googleapis\.com\/css\?family=(.*)/, self.toolbox.fastest);
